@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Frontend Documentation</title>
+    <link rel="stylesheet" href="doc-styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="eyebrow">Project Components</div>
+      <h1>Frontend Documentation</h1>
+      <p>
+        This document explains the React + Vite frontend for the AI Personal Assistant Dashboard.
+        The user-facing experience is intentionally split into two modes: a calm personal workspace
+        for daily productivity, and a control-plane style admin console for SaaS-grade system
+        operations.
+      </p>
+
+      <div class="hero">
+        <h2 style="color: #ffffff; border-top: none; padding-top: 0; margin-top: 0">UI Design Summary</h2>
+        <ul>
+          <li>Stack: React, Vite, React Router, Axios, Tailwind CSS, Recharts</li>
+          <li>Visual direction: warm editorial login surfaces + restrained operational dashboards</li>
+          <li>Interaction model: protected routes, role-aware shells, modal forms, reusable data tables</li>
+          <li>Two dedicated navigation systems: user workspace and admin control plane</li>
+        </ul>
+      </div>
+
+      <h2>UI Structure</h2>
+      <table>
+        <tr>
+          <th>Layer</th>
+          <th>Purpose</th>
+          <th>Main Files</th>
+        </tr>
+        <tr>
+          <td>Auth Entry</td>
+          <td>Login and registration with guarded redirects into the correct experience.</td>
+          <td>`pages/auth/LoginPage.jsx`, `pages/auth/RegisterPage.jsx`</td>
+        </tr>
+        <tr>
+          <td>App Shell</td>
+          <td>Shared sidebar + header layout used by both user and admin spaces.</td>
+          <td>`components/layout/AppShell.jsx`, `components/layout/Sidebar.jsx`</td>
+        </tr>
+        <tr>
+          <td>User Workspace</td>
+          <td>Dashboard, goals, todos, finance, notes, habits, daily logs, profile.</td>
+          <td>`pages/user/*`, `utils/resourceConfigs.jsx`</td>
+        </tr>
+        <tr>
+          <td>Admin Console</td>
+          <td>Overview, user management, data control, security monitoring, audit logs.</td>
+          <td>`pages/admin/*`, `components/ResourceWorkspace.jsx`</td>
+        </tr>
+        <tr>
+          <td>Data Layer</td>
+          <td>JWT-aware Axios client with automatic refresh-token rotation and logout recovery.</td>
+          <td>`api/client.js`, `context/AuthContext.jsx`</td>
+        </tr>
+      </table>
+
+      <h2>Routing Flow</h2>
+      <div class="diagram">
+/ 
+|-- if not authenticated -> /login
+|-- if authenticated user -> /app
+|   |-- /app               dashboard summary
+|   |-- /app/goals         goals management
+|   |-- /app/todos         todo management
+|   |-- /app/transactions  finance tracking
+|   |-- /app/notes         notes system
+|   |-- /app/habits        streak tracking
+|   |-- /app/daily-logs    reflection history
+|   |-- /app/profile       account + sessions
+|-- if authenticated admin -> /admin
+    |-- /admin             global analytics overview
+    |-- /admin/users       search, block, promote, delete
+    |-- /admin/data-control inspect and edit all resources
+    |-- /admin/security    login history + sessions
+    |-- /admin/audit-logs  admin action trail
+      </div>
+
+      <h2>Key User Screens</h2>
+      <div class="mockup">
+        <span class="mockup-header">Dashboard Snapshot</span>
+        <div class="mock-row">Metric rail: completed goals, open todos, balance, active habits</div>
+        <div class="mock-row">Weekly productivity pulse chart with todos completed vs log entries</div>
+        <div class="mock-row">Finance trend chart for income vs expense</div>
+        <div class="mock-row">Upcoming goals, top habits, and recent notes panels</div>
+      </div>
+
+      <div class="mockup">
+        <span class="mockup-header">Resource Console Snapshot</span>
+        <div class="mock-row">Reusable search bar + filters + create button</div>
+        <div class="mock-row">Paginated data table with edit and delete actions</div>
+        <div class="mock-row">Modal editor with validation and typed field rendering</div>
+      </div>
+
+      <div class="mockup">
+        <span class="mockup-header">Admin Console Snapshot</span>
+        <div class="mock-row">Top-level KPI strip for users, activity, suspicious logins, and total goals</div>
+        <div class="mock-row">Analytics charts for user growth, logins, transaction trends, and feature usage</div>
+        <div class="mock-row">Most-active users table and action-heavy operational tables</div>
+      </div>
+
+      <h2>Form Validation Strategy</h2>
+      <p>
+        All create/edit modals use a reusable field renderer and validation pass. Required inputs,
+        minimum numeric values, select options, checkbox states, and textarea content are normalized
+        before sending data to the API. Tags are converted from comma-separated input into arrays.
+      </p>
+
+      <div class="note">
+        The frontend is built to feel like a real admin product, not a card-based student dashboard.
+        User views stay focused and calm, while admin views prioritize dense signal and direct action.
+      </div>
+
+      <h2>State Management and Security</h2>
+      <table>
+        <tr>
+          <th>Concern</th>
+          <th>Frontend Handling</th>
+        </tr>
+        <tr>
+          <td>Access Token</td>
+          <td>Stored locally and attached to outgoing API requests through an Axios interceptor.</td>
+        </tr>
+        <tr>
+          <td>Refresh Token</td>
+          <td>Expected as an HTTP-only cookie; automatically rotated when the API returns 401.</td>
+        </tr>
+        <tr>
+          <td>Protected Routes</td>
+          <td>Route wrapper blocks anonymous users and restricts admin-only screens.</td>
+        </tr>
+        <tr>
+          <td>Role Awareness</td>
+          <td>Post-login redirects send normal users to `/app` and admins to `/admin`.</td>
+        </tr>
+      </table>
+
+      <h2>Responsive Behavior</h2>
+      <p>
+        The layout uses grid-based shells, wraps controls for smaller widths, and keeps tables inside
+        horizontal scroll containers. This allows the product to remain usable on laptop screens,
+        tablets, and mobile devices without breaking core flows.
+      </p>
+
+      <div class="footer">
+        Generated for the AI Personal Assistant Dashboard project submission.
+      </div>
+    </div>
+  </body>
+</html>

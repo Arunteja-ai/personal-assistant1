@@ -1,0 +1,26 @@
+# dependencies
+frontend/node_modules/
+backend/node_modules/
+
+# builds
+frontend/dist/
+
+# local environment
+.env
+.env.*
+!.env.example
+.runtime/
+.playwright-cli/
+
+# generated deliverables
+deliverables/
+ErNO_Class/
+ErNO_Class.zip
+
+# logs
+*.log
+gcm-diagnose.log
+
+# OS / editor
+.DS_Store
+Thumbs.db

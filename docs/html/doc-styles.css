@@ -1,0 +1,169 @@
+body {
+  font-family: Calibri, Arial, sans-serif;
+  color: #1f2d3d;
+  margin: 0;
+  background: #f4efe7;
+}
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 44px 56px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3 {
+  color: #132126;
+}
+
+h1 {
+  font-size: 34px;
+  margin: 14px 0 10px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-top: 32px;
+  border-top: 1px solid #d8d3ca;
+  padding-top: 20px;
+}
+
+h3 {
+  font-size: 18px;
+  margin-top: 24px;
+}
+
+p,
+li,
+td,
+th {
+  font-size: 13.5px;
+  line-height: 1.68;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+th,
+td {
+  border: 1px solid #d8d3ca;
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+th {
+  background: #f7f2eb;
+  text-align: left;
+}
+
+.hero {
+  border: 1px solid #d8d3ca;
+  background: linear-gradient(135deg, #132126, #0f766e);
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.hero p,
+.hero li {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 14px;
+  margin: 14px -14px;
+}
+
+.grid td {
+  border: none;
+  background: #f7f2eb;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.metric {
+  font-size: 24px;
+  font-weight: 700;
+  color: #132126;
+}
+
+.note {
+  background: #eef7f6;
+  border-left: 4px solid #0f766e;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+
+.warning {
+  background: #faecd1;
+  border-left: 4px solid #a16207;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+
+.code {
+  background: #132126;
+  color: #f4efe7;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.diagram {
+  background: #f7f2eb;
+  border: 1px solid #d8d3ca;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.mockup {
+  border: 1px solid #d8d3ca;
+  border-radius: 18px;
+  padding: 16px;
+  background: #fffdf8;
+  margin: 16px 0;
+}
+
+.mockup-header {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6b7c86;
+  margin-bottom: 12px;
+}
+
+.mock-row {
+  display: block;
+  border: 1px solid #e5ddd1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+
+.footer {
+  margin-top: 28px;
+  font-size: 12px;
+  color: #6b7c86;
+}

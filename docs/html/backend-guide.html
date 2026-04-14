@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Backend Documentation</title>
+    <link rel="stylesheet" href="doc-styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="eyebrow">Project Components</div>
+      <h1>Backend Documentation</h1>
+      <p>
+        The backend is an Express + MongoDB API organized in MVC style. It supports user
+        productivity workflows and a full admin control system, including audit logs, security
+        monitoring, resource inspection, and role-based administration.
+      </p>
+
+      <div class="hero">
+        <h2 style="color: #ffffff; border-top: none; padding-top: 0; margin-top: 0">Backend Summary</h2>
+        <ul>
+          <li>Stack: Node.js, Express, MongoDB Atlas, Mongoose</li>
+          <li>Architecture: MVC + services + centralized middleware</li>
+          <li>Security: JWT access tokens, refresh-token rotation, bcrypt hashing, RBAC</li>
+          <li>Admin power: global analytics, user moderation, resource editing, session revocation</li>
+        </ul>
+      </div>
+
+      <h2>Architecture Layout</h2>
+      <div class="diagram">
+Client
+  -> Routes
+      -> Middleware (auth, RBAC, rate limit, errors)
+          -> Controllers
+              -> Services (tokens, analytics, security, admin logs)
+                  -> Mongoose Models
+                      -> MongoDB
+      </div>
+
+      <h2>Collections and Relationships</h2>
+      <table>
+        <tr>
+          <th>Collection</th>
+          <th>Main Fields</th>
+          <th>Relation</th>
+        </tr>
+        <tr>
+          <td>Users</td>
+          <td>name, email, password, role, status, preferences, lastLoginAt</td>
+          <td>Parent identity for all user-owned records</td>
+        </tr>
+        <tr>
+          <td>Goals / Todos / Transactions / Notes / Habits / DailyLogs</td>
+          <td>Each includes `userId` plus feature-specific fields</td>
+          <td>Belongs to one user</td>
+        </tr>
+        <tr>
+          <td>RefreshTokens</td>
+          <td>userId, tokenHash, IP, userAgent, expiresAt, revokedAt</td>
+          <td>Tracks active sessions</td>
+        </tr>
+        <tr>
+          <td>LoginHistory</td>
+          <td>email, status, IP, userAgent, detectedSignals, occurredAt</td>
+          <td>Security telemetry and anomaly detection</td>
+        </tr>
+        <tr>
+          <td>AdminLogs</td>
+          <td>actorEmail, action, targetType, targetId, metadata</td>
+          <td>Immutable audit trail of admin activity</td>
+        </tr>
+      </table>
+
+      <h2>REST API Groups</h2>
+      <table>
+        <tr>
+          <th>Group</th>
+          <th>Core Endpoints</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td>Authentication</td>
+          <td>`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`</td>
+          <td>Identity bootstrap, token refresh, current-user lookup</td>
+        </tr>
+        <tr>
+          <td>User Dashboard</td>
+          <td>`/api/dashboard/summary`</td>
+          <td>Aggregated KPIs, charts, and recent activity for the user view</td>
+        </tr>
+        <tr>
+          <td>Productivity Resources</td>
+          <td>`/api/goals`, `/todos`, `/transactions`, `/notes`, `/habits`, `/daily-logs`</td>
+          <td>CRUD operations scoped to the authenticated user</td>
+        </tr>
+        <tr>
+          <td>Profile</td>
+          <td>`/api/profile`, `/api/profile/password`, `/api/profile/sessions`</td>
+          <td>Profile updates, password change, active-session inspection</td>
+        </tr>
+        <tr>
+          <td>Admin</td>
+          <td>`/api/admin/dashboard`, `/users`, `/resources/*`, `/security/*`, `/audit-logs`</td>
+          <td>Moderation, system analytics, security control, audit trail</td>
+        </tr>
+      </table>
+
+      <h2>Representative Request / Response Examples</h2>
+      <h3>Create a Goal</h3>
+      <div class="code">POST /api/goals
+Authorization: Bearer &lt;access_token&gt;
+
+{
+  "title": "Launch internship portfolio",
+  "category": "Career",
+  "priority": "high",
+  "status": "in_progress",
+  "progress": 60,
+  "targetDate": "2026-05-31"
+}</div>
+
+      <div class="code">Response
+{
+  "message": "Created successfully.",
+  "data": {
+    "_id": "...",
+    "userId": "...",
+    "title": "Launch internship portfolio",
+    "status": "in_progress",
+    "progress": 60
+  }
+}</div>
+
+      <h3>Block a User</h3>
+      <div class="code">PATCH /api/admin/users/:id/status
+Authorization: Bearer &lt;admin_access_token&gt;
+
+{
+  "status": "blocked"
+}</div>
+
+      <div class="code">Result
+- User account status is updated
+- All refresh-token sessions for that user are revoked
+- An admin audit log entry is created</div>
+
+      <h2>Admin Analytics Coverage</h2>
+      <table>
+        <tr>
+          <th>Metric</th>
+          <th>Source</th>
+          <th>Business Value</th>
+        </tr>
+        <tr>
+          <td>Total Users / Active Users</td>
+          <td>User collection and `lastLoginAt` timestamps</td>
+          <td>Tracks product adoption and weekly engagement</td>
+        </tr>
+        <tr>
+          <td>Transaction Trends</td>
+          <td>Transaction aggregation by month and type</td>
+          <td>Shows global financial activity patterns</td>
+        </tr>
+        <tr>
+          <td>Most Active Users</td>
+          <td>Merged counts from goals, todos, transactions, and habits</td>
+          <td>Identifies heavy users and useful engagement signals</td>
+        </tr>
+        <tr>
+          <td>Suspicious Logins</td>
+          <td>LoginHistory with anomaly signals</td>
+          <td>Highlights risk for admin review</td>
+        </tr>
+      </table>
+
+      <h2>Error Handling and Middleware</h2>
+      <ul>
+        <li>Centralized `ApiError` class normalizes operational error responses.</li>
+        <li>Mongoose validation and duplicate-key failures are mapped into readable API errors.</li>
+        <li>Rate limiting, Helmet, compression, cookie parsing, and CORS are configured globally.</li>
+        <li>Protected routes enforce JWT validation, blocked-account checks, and role-based access.</li>
+      </ul>
+
+      <div class="warning">
+        Deployment uses environment variables for MongoDB Atlas, JWT secrets, cookie policy, and
+        client origin. No secrets are hardcoded into the source code.
+      </div>
+
+      <h2>Deployment Notes</h2>
+      <p>
+        The backend includes a Render deployment descriptor and `.env.example`. The production flow
+        is: provision MongoDB Atlas, configure Render environment variables, set the frontend Vercel
+        URL as `CLIENT_URL`, and enable secure cookies for cross-site refresh-token rotation.
+      </p>
+
+      <div class="footer">
+        Generated for the AI Personal Assistant Dashboard project submission.
+      </div>
+    </div>
+  </body>
+</html>

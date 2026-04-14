@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #132126;
+  background: #f3efe9;
+  font-family: "Manrope", sans-serif;
+}
+
+body {
+  @apply bg-app-bg text-app-ink antialiased;
+  margin: 0;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.panel {
+  @apply rounded-[28px] border border-app-line bg-app-panel shadow-panel;
+}
+
+.panel-muted {
+  @apply rounded-[24px] border border-app-line/70 bg-white/75;
+}
+
+.field {
+  @apply w-full rounded-2xl border border-app-line bg-white px-4 py-3 text-sm text-app-ink outline-none transition focus:border-app-accent focus:ring-2 focus:ring-app-accent/20;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 118, 110, 0.45) transparent;
+}

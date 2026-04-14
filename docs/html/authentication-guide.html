@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Authentication Documentation</title>
+    <link rel="stylesheet" href="doc-styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="eyebrow">Project Components</div>
+      <h1>Authentication and Security Documentation</h1>
+      <p>
+        This guide explains the identity flow used by the AI Personal Assistant Dashboard. The goal
+        is to support a modern SPA frontend while keeping session control, admin security monitoring,
+        and token revocation strong enough for real SaaS behavior.
+      </p>
+
+      <div class="hero">
+        <h2 style="color: #ffffff; border-top: none; padding-top: 0; margin-top: 0">Security Summary</h2>
+        <ul>
+          <li>Passwords hashed with bcrypt before storage</li>
+          <li>Short-lived JWT access tokens for API authorization</li>
+          <li>Refresh-token rotation backed by a server-side token store</li>
+          <li>Role-based access control for user and admin paths</li>
+          <li>Login telemetry, anomaly signals, session revocation, and audit logs</li>
+        </ul>
+      </div>
+
+      <h2>JWT Flow Diagram</h2>
+      <div class="diagram">
+User submits credentials
+  -> API validates email + password
+      -> Password compared against bcrypt hash
+      -> Access token (JWT) generated
+      -> Refresh token generated and hashed in DB
+      -> Refresh token set as HTTP-only cookie
+      -> Frontend stores access token locally
+
+Frontend makes authenticated request
+  -> Axios adds Bearer access token
+      -> API validates token and loads user
+          -> Role and status are enforced
+
+If access token expires
+  -> API responds 401
+      -> Frontend sends /auth/refresh using cookie
+          -> API validates stored refresh-token hash
+          -> Old refresh token revoked
+          -> New refresh token issued
+          -> New access token returned
+
+Logout or admin block
+  -> Stored refresh tokens revoked
+  -> New API access denied
+      </div>
+
+      <h2>Authentication Endpoints</h2>
+      <table>
+        <tr>
+          <th>Endpoint</th>
+          <th>Purpose</th>
+          <th>Security Notes</th>
+        </tr>
+        <tr>
+          <td>`POST /api/auth/register`</td>
+          <td>Create account, auto-bootstrap first admin or env-defined admin email</td>
+          <td>Triggers secure password hashing and initial token issue</td>
+        </tr>
+        <tr>
+          <td>`POST /api/auth/login`</td>
+          <td>Authenticate credentials and create a session</td>
+          <td>Writes LoginHistory with anomaly signals</td>
+        </tr>
+        <tr>
+          <td>`POST /api/auth/refresh`</td>
+          <td>Rotate refresh token and mint a fresh access token</td>
+          <td>Uses hashed server-side refresh-token records</td>
+        </tr>
+        <tr>
+          <td>`POST /api/auth/logout`</td>
+          <td>Revoke current refresh token and clear cookie</td>
+          <td>Works even if the user is ending a stale session</td>
+        </tr>
+        <tr>
+          <td>`POST /api/auth/logout-all`</td>
+          <td>Revoke all active sessions for the logged-in user</td>
+          <td>Useful after password changes or suspected device loss</td>
+        </tr>
+      </table>
+
+      <h2>Role-Based Access Control</h2>
+      <table>
+        <tr>
+          <th>Role</th>
+          <th>Capabilities</th>
+        </tr>
+        <tr>
+          <td>User</td>
+          <td>Access personal dashboard, goals, todos, habits, notes, transactions, daily logs, profile</td>
+        </tr>
+        <tr>
+          <td>Admin</td>
+          <td>All user capabilities plus admin dashboard, user moderation, data control, security panel, audit logs</td>
+        </tr>
+      </table>
+
+      <h2>Suspicious Login Detection</h2>
+      <p>The backend writes a LoginHistory document for every important auth event. It flags signals such as:</p>
+      <ul>
+        <li>Repeated failed attempts from the same IP in a short period</li>
+        <li>Repeated failures against the same email address</li>
+        <li>Multi-IP rotation for the same user across a limited time window</li>
+        <li>Blocked-account access attempts</li>
+      </ul>
+
+      <div class="note">
+        These signals are intentionally simple and explainable. They are suitable for a student
+        SaaS project while still demonstrating how a real admin security panel can surface risk.
+      </div>
+
+      <h2>Session Management</h2>
+      <p>
+        Every refresh token is stored with user ID, IP address, user agent, creation time, expiry,
+        and revocation status. This enables:
+      </p>
+      <ul>
+        <li>User-visible session inspection inside the profile page</li>
+        <li>Admin-visible system-wide session monitoring</li>
+        <li>Per-session revocation for incident response</li>
+        <li>Global revocation when a user is blocked by an administrator</li>
+      </ul>
+
+      <h2>Security Controls Summary</h2>
+      <table>
+        <tr>
+          <th>Control</th>
+          <th>Implementation</th>
+        </tr>
+        <tr>
+          <td>Password Safety</td>
+          <td>`bcryptjs` hashing with pre-save model hook</td>
+        </tr>
+        <tr>
+          <td>Token Expiry</td>
+          <td>Configurable JWT expiry (`JWT_EXPIRES_IN`) and refresh-token expiry days</td>
+        </tr>
+        <tr>
+          <td>Transport Security</td>
+          <td>Production cookie security flag + CORS allowlist for frontend origin</td>
+        </tr>
+        <tr>
+          <td>Route Protection</td>
+          <td>JWT middleware + admin-only middleware</td>
+        </tr>
+        <tr>
+          <td>Auditability</td>
+          <td>AdminLogs track moderation and resource-control actions</td>
+        </tr>
+      </table>
+
+      <div class="footer">
+        Generated for the AI Personal Assistant Dashboard project submission.
+      </div>
+    </div>
+  </body>
+</html>
