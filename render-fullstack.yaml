@@ -12,9 +12,11 @@ services:
       - key: NODE_ENV
         value: production
       - key: CLIENT_URL
-        value: https://personal-assistant1-fullstack.onrender.com
+        value: https://frontend-beryl-zeta-m5aw8je72i.vercel.app
       - key: CLIENT_URLS
-        value: https://personal-assistant1-fullstack.onrender.com
+        value: https://frontend-beryl-zeta-m5aw8je72i.vercel.app
+      - key: CLIENT_URL_PATTERNS
+        value: https://*.vercel.app
       - key: MONGO_URI
         value: mongodb+srv://assistantAdmin:cKYg2JAsxTY7Nye1@cluster0.yenrhp9.mongodb.net/personal-assistant?retryWrites=true&w=majority&appName=Cluster0
       - key: JWT_SECRET
