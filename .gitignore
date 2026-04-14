@@ -12,6 +12,7 @@ frontend/dist/
 .runtime/
 .playwright-cli/
 frontend/.vercel/
+backend/.vercel/
 
 # generated deliverables
 deliverables/

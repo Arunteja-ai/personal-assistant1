@@ -12,13 +12,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: CLIENT_URL
-        sync: false
+        value: https://personal-assistant1-fullstack.onrender.com
       - key: CLIENT_URLS
-        sync: false
+        value: https://personal-assistant1-fullstack.onrender.com
       - key: MONGO_URI
-        sync: false
+        value: mongodb+srv://assistantAdmin:cKYg2JAsxTY7Nye1@cluster0.yenrhp9.mongodb.net/personal-assistant?retryWrites=true&w=majority&appName=Cluster0
       - key: JWT_SECRET
-        sync: false
+        value: personal-assistant1-prod-jwt-secret-2026-change-this-now-64chars
       - key: JWT_EXPIRES_IN
         value: 15m
       - key: REFRESH_TOKEN_EXPIRES_IN_DAYS
@@ -28,4 +28,4 @@ services:
       - key: COOKIE_SAME_SITE
         value: lax
       - key: ADMIN_EMAILS
-        sync: false
+        value: admin@example.com
