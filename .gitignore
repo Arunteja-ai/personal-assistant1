@@ -11,6 +11,7 @@ frontend/dist/
 !.env.example
 .runtime/
 .playwright-cli/
+frontend/.vercel/
 
 # generated deliverables
 deliverables/
