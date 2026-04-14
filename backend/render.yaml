@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ai-personal-assistant-api
+    name: personal-assistant1-api-arunteja-ai
     env: node
     plan: free
     rootDir: backend

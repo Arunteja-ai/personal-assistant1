@@ -81,13 +81,13 @@ ADMIN_EMAILS=admin@example.com
 ### Backend URL Format
 
 ```text
-https://ai-personal-assistant-api.onrender.com
+https://personal-assistant1-api-arunteja-ai.onrender.com
 ```
 
 ### Backend Verification
 
 ```powershell
-curl https://ai-personal-assistant-api.onrender.com/api/health
+curl https://personal-assistant1-api-arunteja-ai.onrender.com/api/health
 ```
 
 ## 4. Vercel Frontend
@@ -103,7 +103,7 @@ curl https://ai-personal-assistant-api.onrender.com/api/health
 ### Vercel Environment Variable
 
 ```text
-VITE_API_URL=https://ai-personal-assistant-api.onrender.com
+VITE_API_URL=https://personal-assistant1-api-arunteja-ai.onrender.com
 ```
 
 ### Frontend URL Format
